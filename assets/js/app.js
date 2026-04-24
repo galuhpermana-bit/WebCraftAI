@@ -310,3 +310,30 @@ function downloadHTML() {
   window.URL.revokeObjectURL(url);
   document.body.removeChild(a);
 }
+
+// ══════════════════════════════════════════════
+//  THEME TOGGLE — Dark / Light Mode
+// ══════════════════════════════════════════════
+function setTheme(mode) {
+  const body = document.body;
+  const btnDark  = document.getElementById('btn-dark');
+  const btnLight = document.getElementById('btn-light');
+
+  if (mode === 'light') {
+    body.classList.add('light-mode');
+    btnLight.classList.add('active');
+    btnDark.classList.remove('active');
+    localStorage.setItem('wcai-theme', 'light');
+  } else {
+    body.classList.remove('light-mode');
+    btnDark.classList.add('active');
+    btnLight.classList.remove('active');
+    localStorage.setItem('wcai-theme', 'dark');
+  }
+}
+
+// Restore saved preference on page load
+(function () {
+  const saved = localStorage.getItem('wcai-theme');
+  if (saved === 'light') setTheme('light');
+})();
