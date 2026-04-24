@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebCraft AI — Platform Jasa Pembuatan Website</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">WebCraft<span>AI</span></div>
+  <span class="nav-badge">
+    <img src="assets/images/president-university-logo.png" alt="President University" style="height:18px;width:18px;object-fit:contain;border-radius:3px;flex-shrink:0;">
+    President University
+  </span>
+  <div class="nav-links">
+  <a href="#generator">Generator</a>
+  <a href="#fitur">Fitur</a>
+  <a href="#harga">Harga</a> <!-- Tambahkan ini -->
+  <a href="#tentang">Tentang</a>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-eyebrow">AI-Powered Website Builder</div>
+  <h1>Buat Website UMKM<br>dengan <span class="grad">Kecerdasan Buatan</span></h1>
+  <p class="hero-sub">Platform berbasis AI Orchestration yang menghasilkan website profesional hanya dalam hitungan detik. Cocok untuk pelaku UMKM dan bisnis lokal.</p>
+  <div class="hero-cta">
+    <a href="#generator" class="btn-primary">✦ Coba Sekarang</a>
+    <a href="#fitur" class="btn-secondary">Lihat Fitur →</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num">3 Detik</div>
+    <div class="stat-label">Generate website</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">4 Template</div>
+    <div class="stat-label">Jenis usaha</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">AI Rules</div>
+    <div class="stat-label">Orchestration engine</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">100% Lokal</div>
+    <div class="stat-label">Tanpa server</div>
+  </div>
+</div>
+
+<!-- GENERATOR -->
+<section class="main" id="generator">
+  <!-- FORM -->
+  <div class="form-panel">
+    <div class="panel-title"><span class="dot"></span> Input Bisnis Anda</div>
+
+    <div class="form-group">
+      <label>Nama Bisnis</label>
+      <input type="text" id="f-nama" placeholder="Warung Makan Pak Budi" value="Warung Makan Pak Budi" oninput="liveSlug()">
+    </div>
+
+    <div class="form-group">
+      <label>Jenis Usaha</label>
+      <div class="select-wrap">
+        <select id="f-jenis">
+          <option value="kuliner">🍽️ Kuliner / Makanan</option>
+          <option value="fashion">👗 Fashion / Pakaian</option>
+          <option value="jasa">⚙️ Jasa / Servis</option>
+          <option value="toko">🛒 Toko / Retail</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Palet Warna</label>
+      <div class="select-wrap">
+        <select id="f-warna">
+          <option value="hangat">🔥 Hangat — Oranye & Merah</option>
+          <option value="segar">🌿 Segar — Hijau & Mint</option>
+          <option value="profesional">💼 Profesional — Biru & Abu</option>
+          <option value="elegan">✨ Elegan — Ungu & Gelap</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Nomor WhatsApp</label>
+      <input type="text" id="f-wa" placeholder="08123456789" value="08123456789">
+    </div>
+
+    <div class="form-group">
+      <label>Fitur Website</label>
+      <div class="chip-group" id="chips">
+        <div class="chip on" data-v="menu">Menu/Produk</div>
+        <div class="chip on" data-v="wa">Tombol WA</div>
+        <div class="chip" data-v="lokasi">Lokasi</div>
+        <div class="chip" data-v="galeri">Galeri</div>
+        <div class="chip" data-v="promo">Promo Banner</div>
+        <div class="chip" data-v="review">Testimoni</div>
+      </div>
+    </div>
+
+    <button class="btn-gen" id="btn-gen" onclick="generate()">✦ Generate Website</button>
+
+<!-- TAMBAHKAN TOMBOL DOWNLOAD INI -->
+<button class="btn-secondary" id="btn-download" onclick="downloadHTML()" 
+        style="width: 100%; margin-top: 12px; display: none; justify-content: center; border-color: var(--accent2); color: var(--accent2);">
+    💾 Download File HTML
+</button>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right-panel">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('preview')">Preview</button>
+      <button class="tab-btn" onclick="switchTab('log')">AI Log</button>
+      <button class="tab-btn" onclick="switchTab('arch')">Arsitektur</button>
+    </div>
+
+    <!-- PREVIEW -->
+    <div class="preview-panel active" id="tab-preview">
+      <div class="browser-bar">
+        <div class="browser-dots">
+          <div class="bdot" style="background:#FF5F57"></div>
+          <div class="bdot" style="background:#FEBC2E"></div>
+          <div class="bdot" style="background:#28C840"></div>
+        </div>
+        <div class="browser-url" id="browser-url">webcraftai.demo/warung-makan-pak-budi</div>
+      </div>
+      <div class="preview-body" id="preview-body">
+        <div class="empty-preview">
+          <div class="empty-icon">🌐</div>
+          <div style="font-size:14px;color:var(--muted);">Isi form & klik Generate</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOG -->
+    <div class="log-panel" id="tab-log">
+      <div class="log-header">
+        <span class="log-dot"></span> AI Orchestrator — Console Log
+      </div>
+      <div class="log-body" id="log-body">
+        <span class="log-line lg-dim">// Menunggu input user...</span>
+      </div>
+    </div>
+
+    <!-- ARCH -->
+    <div class="arch-panel" id="tab-arch">
+      <div class="arch-title">Alur Sistem AI Orchestration</div>
+      <div class="arch-flow">
+        <div class="arch-node">
+          <div class="arch-box" style="background:rgba(55,138,221,0.1);border-color:rgba(55,138,221,0.4);color:#7ec8e3;">User Input</div>
+          <div class="arch-sub">Form data</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node">
+          <div class="arch-box" style="background:rgba(124,110,255,0.12);border-color:rgba(124,110,255,0.4);color:#a99dff;">Orchestrator</div>
+          <div class="arch-sub">Rule engine</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node">
+          <div class="arch-box" style="background:rgba(47,255,160,0.1);border-color:rgba(47,255,160,0.3);color:#2FFFA0;">Template Engine</div>
+          <div class="arch-sub">Pilih komponen</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node">
+          <div class="arch-box" style="background:rgba(255,155,80,0.1);border-color:rgba(255,155,80,0.3);color:#FF9B50;">HTML Generator</div>
+          <div class="arch-sub">Render output</div>
+        </div>
+      </div>
+      <div style="font-family:var(--font-head);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Rules yang Dieksekusi</div>
+      <div class="rule-box" id="rule-box">Belum ada rules yang dijalankan...</div>
+    </div>
+  </div>
+</section>
+
+<!-- FITUR -->
+<section class="features" id="fitur">
+  <div class="section-label">Fitur Unggulan</div>
+  <div class="section-title">Semua yang UMKM Butuhkan</div>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(124,110,255,0.15);">🤖</div>
+      <h3>AI Orchestration</h3>
+      <p>Rule-based engine yang otomatis memilih template, warna, dan komponen berdasarkan profil bisnis Anda.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(47,255,160,0.12);">⚡</div>
+      <h3>Live Preview</h3>
+      <p>Lihat hasil website secara real-time tanpa perlu reload. Perubahan langsung terlihat di panel preview.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(255,155,80,0.12);">📱</div>
+      <h3>WhatsApp Integration</h3>
+      <p>Tombol WA otomatis terhubung ke nomor bisnis Anda. Customer tinggal klik untuk langsung menghubungi.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(255,107,107,0.12);">🎨</div>
+      <h3>Smart Color Palette</h3>
+      <p>AI memilih palet warna yang sesuai dengan jenis bisnis dan mood yang ingin ditampilkan.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(55,138,221,0.12);">📦</div>
+      <h3>Modular Components</h3>
+      <p>Aktifkan atau nonaktifkan komponen seperti menu, galeri, lokasi, dan banner promo sesuai kebutuhan.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:rgba(47,255,160,0.1);">💻</div>
+      <h3>Export HTML</h3>
+      <p>Download kode HTML siap pakai. Tidak perlu hosting mahal — cukup upload ke layanan gratis seperti GitHub Pages.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HARGA -->
+<!-- PRICING -->
+<section class="pricing" id="harga">
+  <div class="section-label">Paket Layanan</div>
+  <div class="section-title">Solusi Web Hemat untuk UMKM</div>
+  
+  <div class="price-grid">
+    <!-- BASIC -->
+    <div class="price-card">
+      <div class="p-title">Basic AI</div>
+      <div class="p-price">Gratis<span>/Self-Service</span></div>
+      <ul class="p-list">
+        <li>Generate via WebCraft AI</li>
+        <li>Download Source Code HTML</li>
+        <li>Gunakan Asset Standar</li>
+        <li>Tanpa Hosting & Domain</li>
+      </ul>
+      <a href="#generator" class="btn-price">Coba Sekarang</a>
+    </div>
+
+    <!-- STANDARD (REKOMENDASI) -->
+    <div class="price-card featured">
+      <div class="price-badge">BEST SELLER</div>
+      <div class="p-title">Standard Managed</div>
+      <div class="p-price">Rp 149rb<span>/Sekali Bayar</span></div>
+      <ul class="p-list">
+        <li>Dibantu Generate & Setup</li>
+        <li>Custom Subdomain (bisnis.web.id)</li>
+        <li>Setup Hosting Gratis (GitHub)</li>
+        <li>Integrasi Google Maps & WA</li>
+        <li>Bantuan Edit Konten 1x</li>
+      </ul>
+      <a href="https://wa.me/628123456789?text=Halo,%20saya%20ingin%20pesan%20paket%20Standard" class="btn-price">Pesan Paket</a>
+    </div>
+
+    <!-- PREMIUM -->
+    <div class="price-card">
+      <div class="p-title">Premium Custom</div>
+      <div class="p-price">Rp 499rb<span>/Tahun</span></div>
+      <ul class="p-list">
+        <li>Semua Fitur Standard</li>
+        <li>Domain .com / .id (1 Tahun)</li>
+        <li>Email Bisnis Profesional</li>
+        <li>Optimasi SEO Dasar</li>
+        <li>Maintenance Selama 1 Tahun</li>
+      </ul>
+      <a href="https://wa.me/628123456789?text=Halo,%20saya%20ingin%20pesan%20paket%20Premium" class="btn-price">Konsultasi Dulu</a>
+    </div>
+  </div>
+</section>
+
+<!-- TENTANG -->
+<section class="features" id="tentang" style="margin-top:0;">
+  <div class="section-label">Tentang Project</div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+    <div>
+      <h3 style="font-family:var(--font-head);font-size:20px;font-weight:700;margin-bottom:12px;">Konsep AI Orchestration</h3>
+      <p style="color:var(--muted);font-size:14px;line-height:1.8;">Platform ini mengimplementasikan <strong style="color:var(--text);">rule-based AI orchestration</strong> — pendekatan di mana agen pusat (orchestrator) menerima input pengguna, menjalankan serangkaian aturan logika, lalu mendelegasikan tugas ke komponen template dan generator.</p>
+    </div>
+    <div>
+      <h3 style="font-family:var(--font-head);font-size:20px;font-weight:700;margin-bottom:12px;">Stack Teknologi</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <span style="background:rgba(124,110,255,0.12);border:1px solid rgba(124,110,255,0.3);color:#a99dff;padding:5px 12px;border-radius:99px;font-size:12px;font-weight:500;">HTML5</span>
+        <span style="background:rgba(47,255,160,0.1);border:1px solid rgba(47,255,160,0.25);color:#2FFFA0;padding:5px 12px;border-radius:99px;font-size:12px;font-weight:500;">CSS3</span>
+        <span style="background:rgba(255,155,80,0.1);border:1px solid rgba(255,155,80,0.25);color:#FF9B50;padding:5px 12px;border-radius:99px;font-size:12px;font-weight:500;">Vanilla JS</span>
+        <span style="background:rgba(55,138,221,0.1);border:1px solid rgba(55,138,221,0.25);color:#7ec8e3;padding:5px 12px;border-radius:99px;font-size:12px;font-weight:500;">Rule Engine</span>
+        <span style="background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.25);color:#ff9b9b;padding:5px 12px;border-radius:99px;font-size:12px;font-weight:500;">No Backend</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">WebCraft<span>AI</span></div>
+  <div style="color:var(--muted);font-size:13px;">Project Of Group 2</div>
+  <span class="badge-demo">DEMO VERSION</span>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Website berhasil di-generate!</div>
+
+<!-- SCRIPT -->
+<script src="assets/js/generator/data.js"></script>
+<script src="assets/js/generator/components.js"></script>
+<script src="assets/js/generator/kuliner.js"></script>
+<script src="assets/js/generator/fashion.js"></script>
+<script src="assets/js/generator/jasa.js"></script>
+<script src="assets/js/generator/toko.js"></script>
+<script src="assets/js/generator/ui.js"></script>
+<script src="assets/js/app.js"></script>
+
+</body>
+</html>
