@@ -191,7 +191,6 @@ function _doGenerate(nama, waClean, jenis, warna) {
   else if (jenis === 'jasa')    html = buildJasa(nama, pal, tmpl, wa, fitur, galleryImages);
   else if (jenis === 'toko')    html = buildToko(nama, pal, tmpl, wa, fitur, galleryImages);
   else if (jenis === 'properti') html = buildProperti(nama, pal, tmpl, wa, fitur, galleryImages);
-  else if (jenis === 'laundry')  html = buildLaundry(nama, pal, tmpl, wa, fitur, galleryImages);
 
   // Render ke iframe agar CSS tidak bocor ke halaman utama
   const previewBody = document.getElementById('preview-body');
