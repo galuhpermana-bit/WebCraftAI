@@ -43,95 +43,10 @@ function updateGallerySlot(index, src) {
 
 // ── GENERATE MAIN ──
 function generate() {
-  const namaRaw = document.getElementById('f-nama').value.trim();
-  const waRaw   = document.getElementById('f-wa').value.trim();
-  const jenis   = document.getElementById('f-jenis').value;
-  const warna   = document.getElementById('f-warna').value;
-
-  // ── VALIDASI INPUT ──────────────────────────────────────
-  const errors = [];
-
-  // 1. Nama bisnis — wajib diisi, min 2 karakter
-  if (!namaRaw || namaRaw.length < 2) {
-    errors.push({ id: 'f-nama', msg: 'Nama bisnis wajib diisi (min. 2 karakter)' });
-  }
-
-  // 2. Nomor WhatsApp — wajib angka, 8–15 digit, boleh awalan 0 atau 62
-  const waClean = waRaw.replace(/[\s\-().+]/g, '');
-  if (!waClean) {
-    errors.push({ id: 'f-wa', msg: 'Nomor WhatsApp wajib diisi' });
-  } else if (!/^(0|62)\d{7,13}$/.test(waClean)) {
-    errors.push({ id: 'f-wa', msg: 'Format WA tidak valid (contoh: 08123456789)' });
-  }
-
-  // Tampilkan / bersihkan error
-  ['f-nama', 'f-wa'].forEach(id => clearFieldError(id));
-  if (errors.length > 0) {
-    errors.forEach(e => showFieldError(e.id, e.msg));
-    // Scroll & focus ke field pertama yang error
-    const firstEl = document.getElementById(errors[0].id);
-    if (firstEl) { firstEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); firstEl.focus(); }
-    return;
-  }
-
-  // ── LOADING STATE ───────────────────────────────────────
-  const btn = document.getElementById('btn-gen');
-  setGenerateLoading(true, btn);
-
-  // Sedikit delay agar browser sempat render loading state sebelum JS berat jalan
-  setTimeout(function() {
-    try {
-      _doGenerate(namaRaw, waClean, jenis, warna);
-    } finally {
-      setGenerateLoading(false, btn);
-    }
-  }, 60);
-}
-
-// ── Helper: tampilkan error di bawah field ──
-function showFieldError(fieldId, msg) {
-  const el = document.getElementById(fieldId);
-  if (!el) return;
-  el.style.borderColor = 'var(--color-error, #E04040)';
-  el.style.boxShadow   = '0 0 0 3px rgba(224,64,64,0.15)';
-  // Buat atau update error message element
-  const errId = fieldId + '-err';
-  let errEl = document.getElementById(errId);
-  if (!errEl) {
-    errEl = document.createElement('div');
-    errEl.id = errId;
-    errEl.style.cssText = 'color:var(--color-error,#E04040);font-size:12px;margin-top:5px;padding:0 2px;display:flex;align-items:center;gap:5px;animation:errSlide 0.2s ease;';
-    el.parentNode.insertBefore(errEl, el.nextSibling);
-  }
-  errEl.innerHTML = '<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3.5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 018 4.5zm0 7a.875.875 0 110-1.75.875.875 0 010 1.75z"/></svg>' + msg;
-}
-
-// ── Helper: bersihkan error ──
-function clearFieldError(fieldId) {
-  const el = document.getElementById(fieldId);
-  if (el) { el.style.borderColor = ''; el.style.boxShadow = ''; }
-  const errEl = document.getElementById(fieldId + '-err');
-  if (errEl) errEl.remove();
-}
-
-// ── Helper: loading state tombol ──
-function setGenerateLoading(isLoading, btn) {
-  if (isLoading) {
-    btn.disabled = true;
-    btn.setAttribute('data-orig', btn.innerHTML);
-    btn.innerHTML = '<span class="btn-spinner"></span> Generating...';
-    btn.style.opacity = '0.82';
-    btn.style.cursor  = 'wait';
-  } else {
-    btn.disabled = false;
-    btn.innerHTML = btn.getAttribute('data-orig') || '✦ Generate Website';
-    btn.style.opacity = '';
-    btn.style.cursor  = '';
-  }
-}
-
-// ── Inti generate (dipanggil setelah validasi & loading) ──
-function _doGenerate(nama, waClean, jenis, warna) {
+  const nama  = document.getElementById('f-nama').value || 'Bisnis Saya';
+  const jenis = document.getElementById('f-jenis').value;
+  const warna = document.getElementById('f-warna').value;
+  const waNum = document.getElementById('f-wa').value || '08123456789';
   const fitur = selectedFeatures;
   const pal   = palettes[warna];
   const tmpl  = templates[jenis];
@@ -141,7 +56,7 @@ function _doGenerate(nama, waClean, jenis, warna) {
   tmpl.fontBody = pal.fontBody;
   tmpl.font     = pal.font;
 
-  const wa = `https://wa.me/62${waClean.replace(/^(0|62)/, '')}?text=Halo,%20saya%20ingin%20info%20lebih%20lanjut`;
+  const wa = `https://wa.me/62${waNum.replace(/^0/, '')}?text=Halo,%20saya%20ingin%20info%20lebih%20lanjut`;
 
   // ── AI LOG ──
   const logLines = [
@@ -191,6 +106,7 @@ function _doGenerate(nama, waClean, jenis, warna) {
   else if (jenis === 'jasa')    html = buildJasa(nama, pal, tmpl, wa, fitur, galleryImages);
   else if (jenis === 'toko')    html = buildToko(nama, pal, tmpl, wa, fitur, galleryImages);
   else if (jenis === 'properti') html = buildProperti(nama, pal, tmpl, wa, fitur, galleryImages);
+  else if (jenis === 'laundry')  html = buildLaundry(nama, pal, tmpl, wa, fitur, galleryImages);
 
   // Render ke iframe agar CSS tidak bocor ke halaman utama
   const previewBody = document.getElementById('preview-body');

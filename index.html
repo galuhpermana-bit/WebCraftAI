@@ -85,7 +85,7 @@
 
     <div class="form-group">
       <label>Nama Bisnis</label>
-      <input type="text" id="f-nama" placeholder="Warung Makan Pak Budi" value="Warung Makan Pak Budi" oninput="liveSlug();clearFieldError('f-nama')">
+      <input type="text" id="f-nama" placeholder="Warung Makan Pak Budi" value="Warung Makan Pak Budi" oninput="liveSlug()">
     </div>
 
     <div class="form-group">
@@ -97,6 +97,7 @@
           <option value="jasa">⚙️ Jasa / Servis</option>
           <option value="toko">🛒 Toko / Retail</option>
           <option value="properti">🏡 Properti & Mebel</option>
+          <option value="laundry">🧺 Laundry & Cuci</option>
         </select>
       </div>
     </div>
@@ -109,13 +110,17 @@
           <option value="segar">🌿 Segar — Hijau & Mint</option>
           <option value="profesional">💼 Profesional — Biru & Abu</option>
           <option value="elegan">✨ Elegan — Ungu & Gelap</option>
+          <option value="rose">🌸 Rose — Pink & Mawar</option>
+          <option value="coklat">🍂 Coklat — Earthy & Hangat</option>
+          <option value="slate">🌊 Slate — Biru Tua & Petrol</option>
+          <option value="zaitun">🫒 Zaitun — Hijau Tua & Natural</option>
         </select>
       </div>
     </div>
 
     <div class="form-group">
       <label>Nomor WhatsApp</label>
-      <input type="text" id="f-wa" placeholder="08123456789" value="08123456789" oninput="clearFieldError('f-wa')" inputmode="numeric">
+      <input type="text" id="f-wa" placeholder="08123456789" value="08123456789">
     </div>
 
     <div class="form-group">
@@ -350,6 +355,7 @@
 <script src="assets/js/generator/jasa.js"></script>
 <script src="assets/js/generator/toko.js"></script>
 <script src="assets/js/generator/properti.js"></script>
+<script src="assets/js/generator/laundry.js"></script>
 <script src="assets/js/generator/ui.js"></script>
 <script src="assets/js/app.js"></script>
 

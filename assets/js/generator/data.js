@@ -31,6 +31,37 @@ const palettes = {
     card:'#EEEBff', border:'#D4CFFF', tag:'#4A35B5', tagBg:'rgba(74,53,181,0.1)',
     font:'Cormorant+Garamond:wght@400;600;700|Inter:wght@300;400;500',
     fontHead:'Cormorant Garamond', fontBody:'Inter'
+  },
+
+  /* ── PALET BARU ─────────────────────────────── */
+
+  rose: {
+    primary:'#C2185B', nav:'#1A0010', bg:'#FFF5F8', accent:'#E91E8C',
+    text:'#1a0010', muted:'#880E4F', btn:'#C2185B', btnHover:'#AD1457',
+    card:'#FFE8F0', border:'#F8BBD9', tag:'#C2185B', tagBg:'rgba(194,24,91,0.10)',
+    font:'Josefin+Sans:wght@300;400;600;700|Lora:wght@400;700',
+    fontHead:'Lora', fontBody:'Josefin Sans'
+  },
+  coklat: {
+    primary:'#6D4C41', nav:'#1A0C08', bg:'#FDF6F0', accent:'#A1887F',
+    text:'#1a0c08', muted:'#5D4037', btn:'#6D4C41', btnHover:'#5D4037',
+    card:'#FBF0E8', border:'#E8D5C4', tag:'#6D4C41', tagBg:'rgba(109,76,65,0.10)',
+    font:'Merriweather:wght@300;400;700|Nunito:wght@300;400;600;700',
+    fontHead:'Merriweather', fontBody:'Nunito'
+  },
+  slate: {
+    primary:'#1E3A5F', nav:'#0A0E14', bg:'#F2F5F9', accent:'#4A90A4',
+    text:'#0a0e14', muted:'#2C4A6E', btn:'#1E3A5F', btnHover:'#162C47',
+    card:'#E8EEF5', border:'#BDD0E8', tag:'#1E3A5F', tagBg:'rgba(30,58,95,0.10)',
+    font:'Space+Grotesk:wght@300;400;500;700|Fraunces:ital,wght@0,400;0,700',
+    fontHead:'Fraunces', fontBody:'Space Grotesk'
+  },
+  zaitun: {
+    primary:'#5B6B2F', nav:'#0E1208', bg:'#F6F8F0', accent:'#8FA84A',
+    text:'#0e1208', muted:'#4A5528', btn:'#5B6B2F', btnHover:'#4A5825',
+    card:'#EEF2E4', border:'#D0DBA8', tag:'#5B6B2F', tagBg:'rgba(91,107,47,0.10)',
+    font:'Libre+Baskerville:wght@400;700|Source+Sans+3:wght@300;400;600',
+    fontHead:'Libre Baskerville', fontBody:'Source Sans 3'
   }
 };
 
@@ -174,5 +205,76 @@ const templates = {
       { name:'Pak Agus', role:'Pemilik Warung',   text:'Kulakan disini udah 2 tahun. Harga grosir, kualitas oke, pelayanan ramah.', stars:5 },
       { name:'Desi',     role:'Pelanggan Online', text:'Pesan via WA gampang banget, barang dikemas rapi dan cepat sampai.', stars:4 },
     ]
+  },
+
+  laundry: {
+    headline: 'Bersih, Harum,\nTepat Waktu',
+    sub: 'Layanan laundry profesional untuk pakaian, karpet, kasur, sepatu, dan lainnya. Antar jemput, harga terjangkau, hasil memuaskan.',
+    emoji: '👕',
+    badge: 'Laundry Profesional · Express 24 Jam',
+    tagline: 'Setiap Cucian Kami Perlakukan Seperti Milik Sendiri',
+    stats: [
+      { num: '1000+', label: 'Pelanggan Setia' },
+      { num: '24 Jam', label: 'Layanan Express' },
+      { num: '4.9★',  label: 'Rating Google' },
+    ],
+    categories: ['Cuci Reguler', 'Express & Premium', 'Karpet & Spesial'],
+    menuItems: [
+      {
+        name:'Paket Cuci Kiloan', price:'Rp 7.000', unit:'/ kg',
+        desc:'Cuci + kering + lipat rapi. Min. 2kg. Selesai 2–3 hari kerja.',
+        cat:'Cuci Reguler', badge:'🔥 Paling Laris', featured:false,
+        features:['Cuci bersih sempurna','Kering sempurna','Dilipat rapi','Wangi tahan lama'],
+      },
+      {
+        name:'Paket Cuci + Setrika', price:'Rp 9.000', unit:'/ kg',
+        desc:'Cuci bersih + setrika rapi siap pakai. Min. 2kg.',
+        cat:'Cuci Reguler', badge:'⭐ Best Value', featured:true,
+        features:['Cuci bersih sempurna','Setrika rapi','Siap pakai langsung','Dikemas plastik bersih'],
+      },
+      {
+        name:'Cuci Satuan Kemeja', price:'Rp 8.000', unit:'/ pcs',
+        desc:'Dicuci & disetrika per helai, cocok untuk baju kerja & formal.',
+        cat:'Cuci Reguler', badge:'', featured:false,
+        features:['Handling khusus bahan halus','Setrika presisi','Siap digantung'],
+      },
+      {
+        name:'Express 1 Hari', price:'Rp 12.000', unit:'/ kg',
+        desc:'Order pagi, selesai sore hari. Antar ke rumah sore/malam.',
+        cat:'Express & Premium', badge:'⚡ Kilat', featured:false,
+        features:['Selesai dalam 12 jam','Prioritas antrian','Notifikasi WhatsApp','Antar gratis'],
+      },
+      {
+        name:'Premium Dry Cleaning', price:'Rp 35.000', unit:'/ pcs',
+        desc:'Untuk baju jas, gaun, kebaya, dan bahan delicate. Aman & bersih.',
+        cat:'Express & Premium', badge:'💎 Premium', featured:false,
+        features:['Chemical khusus delicate','Handling sangat hati-hati','Pengemasan premium','Garansi kualitas'],
+      },
+      {
+        name:'Cuci Karpet', price:'Rp 15.000', unit:'/ m²',
+        desc:'Karpet permadani, karpet vinyl, semua ukuran. Dijemput & diantar.',
+        cat:'Karpet & Spesial', badge:'🛋️ Spesial', featured:false,
+        features:['Jemput & antar','Sikat dalam + luar','Dikeringkan sempurna','Bebas tungau & bau'],
+      },
+      {
+        name:'Cuci Kasur / Bantal', price:'Rp 50.000', unit:'/ pcs',
+        desc:'Kasur single/double, bantal, guling. Bersih dari tungau & bakteri.',
+        cat:'Karpet & Spesial', badge:'🛌 Sehat', featured:false,
+        features:['Anti tungau & bakteri','UV treatment','Jemput & antar','Packaging rapi'],
+      },
+      {
+        name:'Cuci Sepatu', price:'Rp 30.000', unit:'/ pasang',
+        desc:'Sneakers, boots, sepatu kanvas. Bersih & wangi seperti baru.',
+        cat:'Karpet & Spesial', badge:'👟 Trending', featured:false,
+        features:['Sikat manual detail','Cuci dalam + luar','Pengeringan aman','Antibakteri'],
+      },
+    ],
+    testimonials: [
+      { name:'Bu Dewi S.',  role:'Pelanggan Tetap',   text:'Sudah langganan 2 tahun! Baju selalu bersih harum, antar jemput tepat waktu. Paling suka paket express-nya, selesai hari itu juga!', stars:5 },
+      { name:'Pak Ridwan',  role:'Karyawan Kantoran', text:'Pakaian kerja saya selalu rapi berkat laundry ini. Harga masuk akal, kualitas premium. Sangat rekomendasikan!', stars:5 },
+      { name:'Ibu Kartika', role:'Ibu Rumah Tangga',  text:'Karpet bulu saya dicuci disini, hasilnya luar biasa bersih dan tidak merusak bahan. Tim-nya profesional dan ramah.', stars:5 },
+    ]
   }
+
 };
+
