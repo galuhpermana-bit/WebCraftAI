@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pembayaran — WebCraft AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════
+   RESET & ROOT
+══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --bg:       #060710;
+  --surface:  #13141A;
+  --surface2: #1A1C24;
+  --border:   rgba(255,255,255,0.08);
+  --text:     #F0F0F5;
+  --muted:    #8888AA;
+  --accent:   #7C6EFF;
+  --accent2:  #2FFFA0;
+  --warm:     #FF9B50;
+  --radius:   14px;
+  --font:     'Inter', sans-serif;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--text);
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 130% 60% at 50% -8%, rgba(124,110,255,0.22) 0%, transparent 58%),
+    radial-gradient(ellipse 80% 55% at -10% 38%, rgba(100,80,255,0.14) 0%, transparent 58%),
+    radial-gradient(ellipse 70% 50% at 112% 65%, rgba(47,255,160,0.11) 0%, transparent 58%),
+    #060710;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dot grid overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    radial-gradient(circle, rgba(124,110,255,0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,110,255,0.03) 1px, transparent 1px),
+    linear-gradient(0deg,  rgba(124,110,255,0.03) 1px, transparent 1px);
+  background-size: 28px 28px, 28px 28px, 28px 28px;
+  opacity: 0.55;
+}
+
+/* ── LIGHT MODE ── */
+body.light-mode {
+  --bg:       #EDF6F9;
+  --surface:  #FFFFFF;
+  --surface2: #D8EEF5;
+  --border:   rgba(0,130,160,0.15);
+  --text:     #0A2A33;
+  --muted:    #3D7A8A;
+  --accent:   #0096B4;
+  --accent2:  #E05A2B;
+  --warm:     #F4845F;
+  background: linear-gradient(160deg, #EDF6F9 0%, #D4EEF7 40%, #FEF0E8 100%);
+  background-attachment: fixed;
+}
+body.light-mode::before { opacity: 0.06; }
+
+/* ══════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════ */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 32px;
+  background: rgba(6,7,16,0.82);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(18px);
+}
+body.light-mode nav { background: rgba(237,246,249,0.92); border-bottom-color: var(--border); }
+
+.nav-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); }
+.nav-logo span { color: var(--accent); }
+
+.nav-back {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 6px;
+  color: var(--muted); font-size: 13px; font-weight: 500;
+  text-decoration: none; padding: 7px 14px;
+  border: 1px solid var(--border); border-radius: 99px;
+  transition: all 0.2s;
+}
+.nav-back:hover { color: var(--text); border-color: var(--accent); }
+
+.nav-secure {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--accent2); font-weight: 600;
+  background: rgba(47,255,160,0.08);
+  border: 1px solid rgba(47,255,160,0.2);
+  padding: 5px 12px; border-radius: 99px;
+}
+body.light-mode .nav-secure {
+  color: var(--accent2);
+  background: rgba(224,90,43,0.08);
+  border-color: rgba(224,90,43,0.2);
+}
+
+/* ══════════════════════════════════════════════
+   MAIN LAYOUT
+══════════════════════════════════════════════ */
+main {
+  position: relative; z-index: 1;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 28px;
+  max-width: 1060px;
+  margin: 40px auto;
+  padding: 0 24px 60px;
+  width: 100%;
+}
+
+/* ══════════════════════════════════════════════
+   SECTION TITLES
+══════════════════════════════════════════════ */
+.section-head {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 14px;
+}
+
+/* ══════════════════════════════════════════════
+   LEFT COLUMN — PAYMENT METHODS
+══════════════════════════════════════════════ */
+.left-col { display: flex; flex-direction: column; gap: 28px; }
+
+.pay-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: border-color 0.2s;
+}
+body.light-mode .pay-card { box-shadow: 0 2px 20px rgba(0,130,160,0.06); }
+
+/* ── STEPS ── */
+.step-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px;
+}
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+body.light-mode .step-num { background: var(--accent); }
+.step-title { font-size: 15px; font-weight: 700; }
+
+/* ── FORM FIELDS ── */
+.form-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  margin-bottom: 14px;
+}
+.form-row.full { grid-template-columns: 1fr; }
+.field label {
+  display: block; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.5px; color: var(--muted);
+  text-transform: uppercase; margin-bottom: 7px;
+}
+.field input {
+  width: 100%; padding: 11px 14px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; color: var(--text); font-family: var(--font);
+  font-size: 14px; outline: none; transition: border-color 0.2s;
+}
+.field input:focus { border-color: var(--accent); }
+.field input::placeholder { color: var(--muted); opacity: 0.6; }
+body.light-mode .field input { background: var(--surface2); border-color: var(--border); }
+
+/* ── PAYMENT METHOD CARDS ── */
+.method-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.method-card {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 10px; padding: 18px 14px;
+  background: var(--surface2); border: 2px solid transparent;
+  border-radius: 12px; cursor: pointer;
+  transition: all 0.2s; text-align: center;
+}
+.method-card:hover { border-color: rgba(124,110,255,0.4); }
+.method-card.selected {
+  border-color: var(--accent);
+  background: rgba(124,110,255,0.08);
+}
+body.light-mode .method-card.selected {
+  border-color: var(--accent);
+  background: rgba(0,150,180,0.08);
+}
+.method-card .m-icon { font-size: 28px; }
+.method-card .m-name { font-size: 13px; font-weight: 600; }
+.method-card .m-desc { font-size: 11px; color: var(--muted); }
+
+/* ── PAYMENT DETAIL PANELS ── */
+.pay-detail {
+  display: none; margin-top: 20px;
+  padding: 20px; border-radius: 12px;
+  background: var(--surface2); border: 1px solid var(--border);
+  animation: fadeIn 0.25s ease;
+}
+.pay-detail.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+/* QRIS */
+.qris-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+}
+.qris-frame {
+  width: 200px; height: 200px;
+  background: white; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  position: relative; overflow: hidden;
+}
+.qris-placeholder {
+  width: 100%; height: 100%;
+  background:
+    repeating-linear-gradient(0deg, #000 0px, #000 4px, #fff 4px, #fff 8px),
+    repeating-linear-gradient(90deg, #000 0px, #000 4px, #fff 4px, #fff 8px);
+  background-blend-mode: multiply;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+}
+.qris-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; z-index: 2;
+}
+.qris-note { font-size: 12px; color: var(--muted); text-align: center; line-height: 1.6; }
+.qris-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(47,255,160,0.1); border: 1px solid rgba(47,255,160,0.25);
+  color: var(--accent2); padding: 5px 12px; border-radius: 99px;
+  font-size: 11px; font-weight: 600;
+}
+body.light-mode .qris-badge {
+  background: rgba(224,90,43,0.08); border-color: rgba(224,90,43,0.25);
+  color: var(--accent2);
+}
+
+/* BANK TRANSFER */
+.bank-list { display: flex; flex-direction: column; gap: 10px; }
+.bank-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; cursor: pointer; transition: border-color 0.2s;
+}
+.bank-item:hover { border-color: var(--accent); }
+.bank-item.selected-bank { border-color: var(--accent); background: rgba(124,110,255,0.06); }
+.bank-left { display: flex; align-items: center; gap: 12px; }
+.bank-emoji { font-size: 20px; }
+.bank-name { font-size: 13px; font-weight: 700; }
+.bank-type { font-size: 11px; color: var(--muted); }
+.bank-copy {
+  font-size: 11px; color: var(--accent); font-weight: 600;
+  cursor: pointer; padding: 5px 10px;
+  border: 1px solid rgba(124,110,255,0.3); border-radius: 99px;
+  background: none; font-family: var(--font);
+  transition: all 0.2s;
+}
+.bank-copy:hover { background: rgba(124,110,255,0.1); }
+
+.bank-account-detail {
+  display: none; margin-top: 14px;
+  padding: 16px; border-radius: 10px;
+  background: var(--surface); border: 1px solid var(--border);
+}
+.bank-account-detail.show { display: block; animation: fadeIn 0.2s ease; }
+.account-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.account-label { font-size: 12px; color: var(--muted); }
+.account-val { font-size: 14px; font-weight: 700; font-family: monospace; letter-spacing: 1px; }
+
+/* E-WALLET */
+.ewallet-list { display: flex; flex-direction: column; gap: 10px; }
+.ewallet-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.ewallet-logo {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.ewallet-name { font-size: 13px; font-weight: 700; }
+.ewallet-num  { font-size: 12px; color: var(--muted); font-family: monospace; }
+.copy-btn {
+  margin-left: auto; font-size: 11px; color: var(--accent);
+  font-weight: 600; cursor: pointer; padding: 5px 10px;
+  border: 1px solid rgba(124,110,255,0.3); border-radius: 99px;
+  background: none; font-family: var(--font); transition: all 0.2s;
+}
+body.light-mode .copy-btn { color: var(--accent); border-color: rgba(0,130,160,0.3); }
+.copy-btn:hover { background: rgba(124,110,255,0.1); }
+
+/* ── STEP 3 — KONFIRMASI ── */
+.confirm-info {
+  background: rgba(47,255,160,0.06);
+  border: 1px solid rgba(47,255,160,0.18);
+  border-radius: 10px; padding: 16px;
+  font-size: 13px; color: var(--muted); line-height: 1.8;
+  margin-bottom: 16px;
+}
+body.light-mode .confirm-info {
+  background: rgba(0,150,180,0.05);
+  border-color: rgba(0,150,180,0.2);
+}
+.confirm-info strong { color: var(--text); }
+
+.btn-confirm {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; width: 100%; padding: 16px;
+  background: #25D366; color: #fff;
+  border: none; border-radius: 12px;
+  font-family: var(--font); font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+}
+.btn-confirm:hover {
+  background: #1ebe5c;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(37,211,102,0.4);
+}
+
+/* ══════════════════════════════════════════════
+   RIGHT COLUMN — ORDER SUMMARY
+══════════════════════════════════════════════ */
+.right-col { position: sticky; top: 90px; height: fit-content; }
+
+.order-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+body.light-mode .order-card { box-shadow: 0 4px 24px rgba(0,130,160,0.08); }
+
+.order-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(124,110,255,0.12), rgba(47,255,160,0.06));
+}
+body.light-mode .order-header {
+  background: linear-gradient(135deg, rgba(0,150,180,0.1), rgba(224,90,43,0.06));
+}
+.order-pkg-name { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+.order-pkg-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600; padding: 4px 10px;
+  border-radius: 99px; background: rgba(124,110,255,0.15);
+  border: 1px solid rgba(124,110,255,0.3); color: var(--accent);
+}
+body.light-mode .order-pkg-badge {
+  background: rgba(224,90,43,0.1); border-color: rgba(224,90,43,0.3); color: var(--accent2);
+}
+
+.order-body { padding: 20px 24px; }
+
+.order-items { margin-bottom: 20px; }
+.order-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.order-item:last-child { border-bottom: none; }
+.oi-check { color: var(--accent2); font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.oi-text { color: var(--muted); line-height: 1.5; }
+
+.order-total {
+  padding: 16px; border-radius: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.total-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.total-label { font-size: 13px; color: var(--muted); }
+.total-val { font-size: 13px; font-weight: 600; }
+.total-row.main .total-label { font-size: 15px; font-weight: 700; color: var(--text); }
+.total-row.main .total-val {
+  font-size: 22px; font-weight: 800; color: var(--accent);
+}
+body.light-mode .total-row.main .total-val { color: var(--accent2); }
+
+.order-note {
+  font-size: 12px; color: var(--muted); line-height: 1.7;
+  padding: 12px; border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+}
+body.light-mode .order-note { background: rgba(0,0,0,0.02); }
+
+/* ── TRUST BADGES ── */
+.trust-row {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-top: 16px; padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.trust-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--muted);
+}
+.trust-item span { font-size: 15px; }
+
+/* ══════════════════════════════════════════════
+   THEME TOGGLE
+══════════════════════════════════════════════ */
+.theme-toggle {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%); z-index: 999;
+  display: flex; align-items: center;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 99px; padding: 5px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+  backdrop-filter: blur(12px);
+}
+body.light-mode .theme-toggle {
+  background: #fff; border-color: rgba(0,130,160,0.2);
+  box-shadow: 0 8px 32px rgba(0,130,160,0.12);
+}
+.theme-toggle-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 18px; border-radius: 99px; border: none;
+  background: transparent; color: var(--muted);
+  font-family: var(--font); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.22s;
+}
+.theme-toggle-btn.active { background: var(--accent); color: #fff; }
+body.light-mode .theme-toggle-btn.active { background: var(--accent2); }
+.theme-divider { width: 1px; height: 18px; background: var(--border); }
+
+/* ══════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════ */
+.toast {
+  position: fixed; bottom: 90px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface); border: 1px solid var(--accent2);
+  color: var(--text); padding: 12px 24px;
+  border-radius: 99px; font-size: 13px; font-weight: 600;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  opacity: 0; pointer-events: none;
+  transition: all 0.3s; z-index: 1000;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  main { grid-template-columns: 1fr; margin: 20px auto; gap: 20px; padding: 0 16px 100px; }
+  .right-col { position: static; order: -1; }
+  nav { padding: 12px 16px; }
+  .method-grid { grid-template-columns: 1fr 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">WebCraft<span>AI</span></div>
+  <span class="nav-secure">🔒 Pembayaran Aman</span>
+  <a href="index.html" class="nav-back">← Kembali</a>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <!-- ══ LEFT — PAYMENT STEPS ══ -->
+  <div class="left-col">
+
+    <!-- STEP 1: INFO PEMESAN -->
+    <div class="pay-card">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-title">Informasi Pemesan</div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Nama Lengkap</label>
+          <input type="text" id="in-nama" placeholder="Budi Santoso">
+        </div>
+        <div class="field">
+          <label>Nomor WhatsApp</label>
+          <input type="text" id="in-wa" placeholder="08123456789">
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="field">
+          <label>Nama Bisnis</label>
+          <input type="text" id="in-bisnis" placeholder="Warung Makan Pak Budi">
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="field">
+          <label>Catatan (Opsional)</label>
+          <input type="text" id="in-catatan" placeholder="Misal: ingin domain .com, warna merah, dll">
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: METODE PEMBAYARAN -->
+    <div class="pay-card">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-title">Pilih Metode Pembayaran</div>
+      </div>
+
+      <div class="method-grid">
+        <div class="method-card selected" onclick="selectMethod('qris')">
+          <div class="m-icon">📱</div>
+          <div class="m-name">QRIS</div>
+          <div class="m-desc">GoPay, OVO, Dana, dll</div>
+        </div>
+        <div class="method-card" onclick="selectMethod('transfer')">
+          <div class="m-icon">🏦</div>
+          <div class="m-name">Transfer Bank</div>
+          <div class="m-desc">BCA, BNI, BRI, Mandiri</div>
+        </div>
+        <div class="method-card" onclick="selectMethod('ewallet')">
+          <div class="m-icon">💚</div>
+          <div class="m-name">E-Wallet</div>
+          <div class="m-desc">GoPay, OVO, Dana</div>
+        </div>
+        <div class="method-card" onclick="selectMethod('cod')">
+          <div class="m-icon">🤝</div>
+          <div class="m-name">COD / Ketemu</div>
+          <div class="m-desc">Bayar langsung / COD</div>
+        </div>
+      </div>
+
+      <!-- DETAIL: QRIS -->
+      <div class="pay-detail active" id="detail-qris">
+        <div class="qris-wrap">
+          <div class="qris-badge">📱 Scan QRIS — semua dompet digital diterima</div>
+          <div class="qris-frame">
+            <!-- Placeholder QRIS art — ganti dengan gambar QRIS asli kamu -->
+            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;background:#f5f5f5;border-radius:8px;">
+              <div style="font-size:11px;color:#888;text-align:center;font-family:monospace;">
+                <img src="assets/images/QRIS DANA.jpeg" style="width:100%;height:100%;object-fit:contain;border-radius:8px;">
+              </div>
+            </div>
+            <!-- 
+              CARA MENGGANTI:
+              Hapus <div> di atas, lalu taruh:
+              <img src="assets/images/qris.png" style="width:100%;height:100%;object-fit:contain;border-radius:8px;">
+            -->
+          </div>
+          <div class="qris-note">
+            1. Buka aplikasi dompet digital kamu (GoPay, OVO, Dana, dll)<br>
+            2. Pilih menu <strong style="color:var(--text)">Scan QR</strong><br>
+            3. Arahkan kamera ke kode QRIS di atas<br>
+            4. Masukkan nominal sesuai paket yang dipilih<br>
+            5. Klik konfirmasi & kirim bukti via WhatsApp
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAIL: BANK TRANSFER -->
+      <div class="pay-detail" id="detail-transfer">
+        <div class="section-head">Pilih Bank Tujuan</div>
+        <div class="bank-list">
+
+          <div class="bank-item" onclick="toggleBank('bca')">
+            <div class="bank-left">
+              <div class="bank-emoji">🔵</div>
+              <div>
+                <div class="bank-name">BCA</div>
+                <div class="bank-type">Bank Central Asia</div>
+              </div>
+            </div>
+            <button class="bank-copy" onclick="event.stopPropagation(); copyText('5222196710', 'No. Rek BCA disalin!')">Salin No. Rek</button>
+          </div>
+          <div class="bank-account-detail" id="bank-bca">
+            <div class="account-row">
+              <span class="account-label">Nomor Rekening</span>
+              <span class="account-val">5222196710</span>
+            </div>
+            <div class="account-row">
+              <span class="account-label">Atas Nama</span>
+              <span class="account-val" style="font-family:var(--font);font-size:13px;">SAMUEL ALFA EDISON</span>
+            </div>
+            <div class="account-row" style="margin-bottom:0">
+              <span class="account-label">Jumlah Transfer</span>
+              <span class="account-val" id="bca-total" style="color:var(--accent)">Rp 149.000</span>
+            </div>
+          </div>
+
+          <div class="bank-item" onclick="toggleBank('bmri')">
+            <div class="bank-left">
+              <div class="bank-emoji">🟠</div>
+              <div>
+                <div class="bank-name">BMRI</div>
+                <div class="bank-type">Bank Mandiri Replublik Indonesia</div>
+              </div>
+            </div>
+            <button class="bank-copy" onclick="event.stopPropagation(); copyText('', 'Maaf Layanan Tidak Tersedia')">BELUM BISA DIGUNAKAN</button>
+          </div>
+          <div class="bank-account-detail" id="bank-bmri">
+            <div class="account-row">
+              <span class="account-label"><a type="hidden">Nomor Rekening</a></span>
+              <span class="account-val" style="display:none;"><a type="hidden">Masukan No Rek disini</a></span>
+            </div>
+            <div class="account-row">
+              <span class="account-label">Atas Nama</span>
+              <span class="account-val" style="font-family:var(--font);font-size:13px;display:none;"><a type="hidden">NAMA KAMU</a></span>
+            </div>
+            <div class="account-row" style="margin-bottom:0">
+              <span class="account-label">Jumlah Transfer</span>
+              <span class="account-val" id="bmri-total" style="color:var(--accent);display:none;">Rp 149.000</span>
+            </div>
+          </div>
+
+          <div class="bank-item" onclick="toggleBank('bri')">
+            <div class="bank-left">
+              <div class="bank-emoji">🔷</div>
+              <div>
+                <div class="bank-name">BRI</div>
+                <div class="bank-type">Bank Rakyat Indonesia</div>
+              </div>
+            </div>
+            <button class="bank-copy" onclick="event.stopPropagation(); copyText('031901007445535', 'No. Rek BRI disalin!')">Salin No. Rek</button>
+          </div>
+          <div class="bank-account-detail" id="bank-bri">
+            <div class="account-row">
+              <span class="account-label">Nomor Rekening</span>
+              <span class="account-val">0319 0100 7445 535</span>
+            </div>
+            <div class="account-row">
+              <span class="account-label">Atas Nama</span>
+              <span class="account-val" style="font-family:var(--font);font-size:13px;">SAMUEL ALFA EDISON</span>
+            </div>
+            <div class="account-row" style="margin-bottom:0">
+              <span class="account-label">Jumlah Transfer</span>
+              <span class="account-val" id="bri-total" style="color:var(--accent)">Rp 149.000</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- DETAIL: E-WALLET -->
+      <div class="pay-detail" id="detail-ewallet">
+        <div class="ewallet-list">
+          <div class="ewallet-item">
+            <div class="ewallet-logo" style="background:rgba(0,183,73,0.15);">💚</div>
+            <div>
+              <div class="ewallet-name">GoPay</div>
+              <div class="ewallet-num">0851-4154-5277</div>
+            </div>
+            <button class="copy-btn" onclick="copyText('085141545277', 'No. GoPay disalin!')">Salin</button>
+          </div>
+          <div class="ewallet-item">
+            <div class="ewallet-logo" style="background:rgba(100,50,200,0.15);">💜</div>
+            <div>
+              <div class="ewallet-name">OVO</div>
+              <div class="ewallet-num">0851-4154-5277</div>
+            </div>
+            <button class="copy-btn" onclick="copyText('085141545277', 'No. OVO disalin!')">Salin</button>
+          </div>
+          <div class="ewallet-item">
+            <div class="ewallet-logo" style="background:rgba(0,140,255,0.15);">💙</div>
+            <div>
+              <div class="ewallet-name">Dana</div>
+              <div class="ewallet-num">0851-4154-5277</div>
+            </div>
+            <button class="copy-btn" onclick="copyText('085141545277', 'No. Dana disalin!')">Salin</button>
+          </div>
+        </div>
+        <div style="margin-top:14px;font-size:12px;color:var(--muted);line-height:1.7;">
+          Kirim ke nomor di atas sesuai nominal paket. Sertakan nama bisnis kamu di kolom <strong style="color:var(--text)">berita/catatan</strong>.
+        </div>
+      </div>
+
+      <!-- DETAIL: COD -->
+      <div class="pay-detail" id="detail-cod">
+        <div style="text-align:center;padding:20px 0;">
+          <div style="font-size:48px;margin-bottom:12px;">🤝</div>
+          <div style="font-size:15px;font-weight:700;margin-bottom:8px;">Bayar Langsung / COD</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.8;">
+            Hubungi kami via WhatsApp untuk mengatur waktu dan tempat pertemuan.<br>
+            Pembayaran dilakukan saat serah terima project.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: KONFIRMASI -->
+    <div class="pay-card">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-title">Konfirmasi Pembayaran</div>
+      </div>
+      <div class="confirm-info">
+        Setelah transfer, kirim <strong>bukti pembayaran</strong> via WhatsApp beserta:
+        <br>• Nama lengkap & nama bisnis
+        <br>• Paket yang dipesan
+        <br>• Screenshot/struk pembayaran
+        <br><br>
+        Tim kami akan memproses pesanan dalam <strong>1×24 jam kerja</strong> setelah pembayaran dikonfirmasi.
+      </div>
+      <a id="wa-confirm-btn" href="#" class="btn-confirm" onclick="confirmWA(event)">
+        <span style="font-size:20px;">💬</span>
+        Kirim Konfirmasi via WhatsApp
+      </a>
+    </div>
+
+  </div>
+
+  <!-- ══ RIGHT — ORDER SUMMARY ══ -->
+  <div class="right-col">
+    <div class="order-card">
+      <div class="order-header">
+        <div class="order-pkg-name" id="summary-name">Standard Managed</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+          <span class="order-pkg-badge" id="summary-badge">⭐ BEST SELLER</span>
+        </div>
+      </div>
+      <div class="order-body">
+        <div class="order-items" id="summary-items">
+          <!-- filled by JS -->
+        </div>
+        <div class="order-total">
+          <div class="total-row">
+            <span class="total-label">Subtotal</span>
+            <span class="total-val" id="summary-subtotal">Rp 149.000</span>
+          </div>
+          <div class="total-row">
+            <span class="total-label">Biaya Admin</span>
+            <span class="total-val" style="color:var(--accent2)">Gratis</span>
+          </div>
+          <div style="border-top:1px solid var(--border);margin:10px 0;"></div>
+          <div class="total-row main">
+            <span class="total-label">Total Bayar</span>
+            <span class="total-val" id="summary-total">Rp 149.000</span>
+          </div>
+        </div>
+        <div class="order-note">
+          💡 <strong>Untuk project kuliah:</strong> Pembayaran bisa diatur sesuai kesepakatan. Hubungi kami untuk diskusi lebih lanjut.
+        </div>
+        <div class="trust-row">
+          <div class="trust-item"><span>🔒</span> Data pribadi aman & terlindungi</div>
+          <div class="trust-item"><span>⚡</span> Proses dalam 1×24 jam kerja</div>
+          <div class="trust-item"><span>💬</span> Support via WhatsApp langsung</div>
+          <div class="trust-item"><span>🎓</span> Project by President University</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- THEME TOGGLE -->
+<div class="theme-toggle">
+  <button class="theme-toggle-btn active" id="btn-dark" onclick="setTheme('dark')">🌙 Dark</button>
+  <div class="theme-divider"></div>
+  <button class="theme-toggle-btn" id="btn-light" onclick="setTheme('light')">☀️ Light</button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+//  PACKAGE DATA
+// ══════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const pkgName = params.get('pkg'); 
+    const price = params.get('price'); 
+
+    if (pkgName) {
+        // Logika untuk otomatis memilih card paket di halaman payment
+        // Misal jika id paketnya adalah 'pkg-pro'
+        const targetCard = document.getElementById(`pkg-${pkgName}`);
+        if (targetCard) {
+            targetCard.click(); // Simulasikan klik pada paket yang sesuai
+        }
+    }
+});
+
+const packages = {
+  standard: {
+    name:    'Standard Managed',
+    badge:   '⭐ BEST SELLER',
+    price:   149000,
+    label:   'Rp 149.000',
+    items: [
+      'Dibantu Generate & Setup website',
+      'Custom Subdomain (bisnis.web.id)',
+      'Setup Hosting Gratis (GitHub Pages)',
+      'Integrasi Google Maps & WhatsApp',
+      'Bantuan Edit Konten 1x',
+    ],
+    wa: '6281296956975',
+    waText: 'Halo, saya ingin memesan paket Standard Managed'
+  },
+  premium: {
+    name:    'Premium Custom',
+    badge:   '👑 PREMIUM',
+    price:   699000,
+    label:   'Rp 699.000',
+    items: [
+      'Semua fitur Standard Managed',
+      'Domain .com / .id (1 Tahun)',
+      'Email Bisnis Profesional',
+      'Optimasi SEO Dasar',
+      'Maintenance Selama 1 Tahun',
+    ],
+    wa: '6281296956975',
+    waText: 'Halo, saya ingin memesan paket Premium Custom'
+  }
+};
+
+// ── Baca parameter dari URL (?pkg=standard / ?pkg=premium)
+const urlParams  = new URLSearchParams(window.location.search);
+const pkgKey     = urlParams.get('pkg') || 'standard';
+const currentPkg = packages[pkgKey] || packages.standard;
+
+// ── Render order summary
+document.getElementById('summary-name').textContent = currentPkg.name;
+document.getElementById('summary-badge').textContent = currentPkg.badge;
+document.getElementById('summary-subtotal').textContent = currentPkg.label;
+document.getElementById('summary-total').textContent = currentPkg.label;
+
+// Bank totals
+['bca','bmri','bri'].forEach(b => {
+  const el = document.getElementById(b + '-total');
+  if (el) el.textContent = currentPkg.label;
+});
+
+document.getElementById('summary-items').innerHTML = currentPkg.items.map(item =>
+  `<div class="order-item">
+    <div class="oi-check">✓</div>
+    <div class="oi-text">${item}</div>
+  </div>`
+).join('');
+
+// ══════════════════════════════════════════════
+//  SELECT PAYMENT METHOD
+// ══════════════════════════════════════════════
+let currentMethod = 'qris';
+
+function selectMethod(method) {
+  currentMethod = method;
+  // Update cards
+  document.querySelectorAll('.method-card').forEach(c => c.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  // Show/hide detail panels
+  document.querySelectorAll('.pay-detail').forEach(p => p.classList.remove('active'));
+  document.getElementById('detail-' + method).classList.add('active');
+}
+
+// ══════════════════════════════════════════════
+//  BANK TOGGLE
+// ══════════════════════════════════════════════
+function toggleBank(bank) {
+  const detail = document.getElementById('bank-' + bank);
+  const isOpen = detail.classList.contains('show');
+  document.querySelectorAll('.bank-account-detail').forEach(d => d.classList.remove('show'));
+  document.querySelectorAll('.bank-item').forEach(i => i.classList.remove('selected-bank'));
+  if (!isOpen) {
+    detail.classList.add('show');
+    event.currentTarget.classList.add('selected-bank');
+  }
+}
+
+// ══════════════════════════════════════════════
+//  COPY TO CLIPBOARD
+// ══════════════════════════════════════════════
+function copyText(text, msg) {
+  navigator.clipboard.writeText(text).then(() => showToast('✓ ' + msg));
+}
+
+// ══════════════════════════════════════════════
+//  CONFIRM VIA WHATSAPP
+// ══════════════════════════════════════════════
+function confirmWA(e) {
+  e.preventDefault();
+  const nama    = document.getElementById('in-nama').value.trim();
+  const wa      = document.getElementById('in-wa').value.trim();
+  const bisnis  = document.getElementById('in-bisnis').value.trim();
+  const catatan = document.getElementById('in-catatan').value.trim();
+
+  if (!nama || !wa) {
+    showToast('⚠️ Isi nama dan nomor WhatsApp dulu!');
+    document.getElementById('in-nama').focus();
+    return;
+  }
+
+  const methodLabel = {
+    qris: 'QRIS', transfer: 'Transfer Bank',
+    ewallet: 'E-Wallet', cod: 'COD / Ketemu Langsung'
+  }[currentMethod];
+
+  const msg = [
+    `Halo! Saya ingin konfirmasi pembayaran WebCraft AI 🎉`,
+    ``,
+    `📦 *Paket:* ${currentPkg.name}`,
+    `💰 *Total:* ${currentPkg.label}`,
+    `💳 *Metode:* ${methodLabel}`,
+    ``,
+    `👤 *Nama:* ${nama}`,
+    `📱 *WA:* ${wa}`,
+    bisnis  ? `🏪 *Bisnis:* ${bisnis}` : '',
+    catatan ? `📝 *Catatan:* ${catatan}` : '',
+    ``,
+    `Mohon konfirmasi penerimaan pembayaran. Terima kasih! 🙏`
+  ].filter(l => l !== undefined && !(l === '' && false)).join('\n');
+
+  const waUrl = `https://wa.me/${currentPkg.wa}?text=${encodeURIComponent(msg)}`;
+  window.open(waUrl, '_blank');
+
+  const dataKeSheets = {
+    paket: currentPkg.name,
+    harga: currentPkg.price,
+    nama: nama,
+    wa: wa,
+    bisnis: bisnis,
+    catatan: catatan
+  };
+
+  // Kirim data ke Google Sheets
+  fetch('URL_WEB_APP_ANDA_DI_SINI', {
+    method: 'POST',
+    mode: 'no-cors', // Penting untuk Apps Script
+    body: JSON.stringify(dataKeSheets)
+  })
+  .then(() => {
+    console.log("Data tersimpan di Sheets");
+    // Lanjutkan ke WhatsApp setelah data terkirim
+    kirimKeWhatsApp(dataKeSheets); 
+  });
+}
+
+// ══════════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ══════════════════════════════════════════════
+//  THEME TOGGLE
+// ══════════════════════════════════════════════
+function setTheme(mode) {
+  const body = document.body;
+  const btnDark  = document.getElementById('btn-dark');
+  const btnLight = document.getElementById('btn-light');
+  if (mode === 'light') {
+    body.classList.add('light-mode');
+    btnLight.classList.add('active');
+    btnDark.classList.remove('active');
+    localStorage.setItem('wcai-theme', 'light');
+  } else {
+    body.classList.remove('light-mode');
+    btnDark.classList.add('active');
+    btnLight.classList.remove('active');
+    localStorage.setItem('wcai-theme', 'dark');
+  }
+}
+(function() {
+  if (localStorage.getItem('wcai-theme') === 'light') setTheme('light');
+})();
+
+
+</script>
+</body>
+</html>
