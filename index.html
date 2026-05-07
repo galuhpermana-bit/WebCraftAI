@@ -11,6 +11,10 @@
 <title>WebCraft AI — Platform Jasa Pembuatan Website</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
+<link rel="manifest" href="assets/images/site.webmanifest">
 </head>
 <body>
 
@@ -25,7 +29,19 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">WebCraft<span>AI</span></div>
+  <div class="nav-left">
+    <div class="nav-logo">WebCraft<span>AI</span></div>
+    <!-- THEME TOGGLE -->
+    <div class="theme-toggle" id="theme-toggle">
+      <button class="theme-toggle-btn active" id="btn-dark" onclick="setTheme('dark')">
+        <span class="t-icon">🌙</span> Dark
+      </button>
+      <div class="theme-divider"></div>
+      <button class="theme-toggle-btn" id="btn-light" onclick="setTheme('light')">
+        <span class="t-icon">☀️</span> Light
+      </button>
+    </div>
+  </div>
   <span class="nav-badge">
     <img src="assets/images/president-university-logo.png" alt="President University" style="height:18px;width:18px;object-fit:contain;border-radius:3px;flex-shrink:0;">
     President University
@@ -333,16 +349,7 @@
   <span class="badge-demo">DEMO VERSION</span>
 </footer>
 
-<!-- THEME TOGGLE -->
-<div class="theme-toggle" id="theme-toggle">
-  <button class="theme-toggle-btn active" id="btn-dark" onclick="setTheme('dark')">
-    <span class="t-icon">🌙</span> Dark
-  </button>
-  <div class="theme-divider"></div>
-  <button class="theme-toggle-btn" id="btn-light" onclick="setTheme('light')">
-    <span class="t-icon">☀️</span> Light
-  </button>
-</div>
+
 
 <!-- TOAST -->
 <div class="toast" id="toast">✓ Website berhasil di-generate!</div>
