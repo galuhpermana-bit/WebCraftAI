@@ -980,6 +980,22 @@
       gap: 12px;
     }
     .nav-links { display: none; }
+    .theme-toggle {
+      padding: 1px !important;
+      gap: 2px !important;
+    }
+    .theme-toggle-btn {
+      padding: 4px 8px !important;
+      font-size: 10px !important;
+      min-height: auto !important;
+      gap: 2px !important;
+    }
+    .theme-toggle-btn .t-icon {
+      font-size: 10px !important;
+    }
+    .theme-divider {
+      height: 10px !important;
+    }
     .nav-badge {
       position: static;
       left: auto;
@@ -1199,12 +1215,16 @@
       font-size: clamp(24px, 7.5vw, 32px) !important;
     }
 
-    /* ── 13. THEME TOGGLE — lebih besar touch target ── */
+    /* ── 13. THEME TOGGLE — compact di mobile ── */
     .theme-toggle-btn {
-      padding: 11px 18px !important;
-      font-size: 13px !important;
-      min-height: 44px !important;
+      padding: 4px 8px !important;
+      font-size: 10px !important;
+      min-height: auto !important;
+      gap: 2px !important;
       -webkit-tap-highlight-color: transparent !important;
+    }
+    .theme-toggle-btn .t-icon {
+      font-size: 10px !important;
     }
 
     /* ── 14. GALLERY UPLOAD — tap area lebih jelas ── */
