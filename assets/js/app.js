@@ -39,6 +39,32 @@ function updateGallerySlot(index, src) {
     : '<span>+</span><small>Slot ' + (index + 1) + '</small>';
 }
 
+// ── HAMBURGER MENU TOGGLE ──
+function toggleMobileMenu() {
+  const hamburger = document.getElementById('hamburger-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  
+  if (hamburger && mobileMenu) {
+    hamburger.classList.toggle('active');
+    mobileMenu.classList.toggle('active');
+  }
+}
+
+// Close mobile menu when a link is clicked
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileMenuLinks = document.querySelectorAll('.mobile-menu a');
+  mobileMenuLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      const hamburger = document.getElementById('hamburger-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (hamburger && mobileMenu) {
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('active');
+      }
+    });
+  });
+});
+
 // Expose fungsi ke HTML (onclick="liveSlug()" dll)
 
 // ── GENERATE MAIN ──
