@@ -241,31 +241,6 @@
     transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--text); }
-  .nav-badge {
-    background: rgba(124,110,255,0.15);
-    border: 1px solid rgba(124,110,255,0.3);
-    color: var(--accent);
-    padding: 4px 12px;
-    border-radius: 99px;
-    font-size: 12px;
-    font-weight: 500;
-    font-family: var(--font-head);
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-  }
-  .nav-badge img {
-    height: 18px;
-    width: 18px;
-    max-height: 18px;
-    max-width: 18px;
-    object-fit: contain;
-    border-radius: 3px;
-    flex-shrink: 0;
-  }
 
   /* ── HERO ── */
   .hero {
